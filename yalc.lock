@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "@subsidia/sdk": {
+      "signature": "a7c5dce6659179a2e8f87646176bf9da",
+      "file": true
+    }
+  }
+}
