@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { subsidiaClient } from '@/subsidia/client';
 import Image from 'next/image';
+import { formatPriceAmount } from '@subsidia/sdk';
 
 export default async function OutfitId({
                                            params,
@@ -21,6 +22,19 @@ export default async function OutfitId({
             },
         });
 
+        if (!outfit) {
+            return notFound();
+        }
+
+        const outfitItems = await subsidiaClient.outfitItem.getOutfitItems({
+            filterOptions: {
+                outfitId: parseInt(id),
+            },
+            fetchOptions: {
+                cache: 'no-store',
+            },
+        });
+
         return (
             <div>
                 <h1 className="text-4xl mb-6">{outfit.name}</h1>
@@ -30,8 +44,22 @@ export default async function OutfitId({
                 {outfit.assetRelations?.assetRelations?.length && (
                     <div className="grid grid-cols-2 gap-4">
                         {outfit.assetRelations.assetRelations.map((assetRelation) => (
-                            <Image className="aspect-square w-full object-cover rounded-lg border border-gray-900" key={assetRelation.id} src={assetRelation.asset?.url || ''} alt={outfit.name} width={500} height={500} />
+                            <Image className="aspect-square w-full object-cover rounded-lg border border-gray-900"
+                                   key={assetRelation.id} src={assetRelation.asset?.url || ''} alt={outfit.name} width={500}
+                                   height={500} />
                         ))}
+                    </div>
+                )}
+                {outfitItems.outfitItems.length > 0 && (
+                    <div className="my-8">
+                        <h2 className="text-3xl mb-4">Outfit Items</h2>
+                        <ul className="list-disc pl-6">
+                            {outfitItems.outfitItems.map((item) => (
+                                <li key={item.id} className="mb-2">
+                                    {item.article?.name} - {item.sizeLabel} - {formatPriceAmount(item.price)}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 )}
             </div>

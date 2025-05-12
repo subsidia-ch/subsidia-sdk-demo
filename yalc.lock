@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "@subsidia/sdk": {
-      "signature": "a7c5dce6659179a2e8f87646176bf9da",
+      "signature": "1b596e0126367b8fa0cf93abf0d9dcf1",
       "file": true
     }
   }
