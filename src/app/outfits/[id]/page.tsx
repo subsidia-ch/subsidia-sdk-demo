@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { subsidiaClient } from '@/subsidia/client';
 import Image from 'next/image';
-import { formatPriceAmount } from '@subsidia/sdk';
+import { formatPriceAmount } from '@subsidia-ch/sdk';
 
 export default async function OutfitId({
                                            params,

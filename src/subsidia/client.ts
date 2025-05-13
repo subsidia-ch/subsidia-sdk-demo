@@ -1,4 +1,4 @@
-import { createClient } from '@subsidia/sdk';
+import { createClient } from '@subsidia-ch/sdk';
 
 export const subsidiaClient = await createClient({
     environment: process.env.SUBSIDIA_ENVIRONMENT as 'PROD' | 'PRE' | 'STA',
