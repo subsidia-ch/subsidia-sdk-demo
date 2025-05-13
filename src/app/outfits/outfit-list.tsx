@@ -1,6 +1,6 @@
 'use client';
 
-import { GetOutfits, Outfit } from '@subsidia/sdk';
+import { GetOutfits, Outfit } from '@subsidia-ch/sdk';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';

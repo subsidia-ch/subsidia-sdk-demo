@@ -1,6 +1,6 @@
 'use server';
 
-import { GetOutfitsParams } from '@subsidia/sdk';
+import { GetOutfitsParams } from '@subsidia-ch/sdk';
 import { subsidiaClient } from '@/subsidia/client';
 
 export async function getOutfits(params: GetOutfitsParams) {
