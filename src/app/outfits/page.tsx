@@ -7,7 +7,7 @@ export default async function Outfits() {
             size: 2,
         },
         fetchOptions: {
-            cache: 'no-store',
+            cache: 'force-cache',
         },
     });
 
