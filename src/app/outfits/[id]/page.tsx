@@ -52,7 +52,7 @@ export default async function OutfitId({
                 )}
                 {outfitItems.outfitItems.length > 0 && (
                     <div className="my-8">
-                        <h2 className="text-3xl mb-4">Outfit Items</h2>
+                        <h2 className="text-3xl mb-4">Outfit Items:</h2>
                         <ul className="list-disc pl-6">
                             {outfitItems.outfitItems.map((item) => (
                                 <li key={item.id} className="mb-2">
