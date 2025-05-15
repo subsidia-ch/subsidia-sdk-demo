@@ -1,39 +1,40 @@
-import { notFound } from 'next/navigation';
-import { subsidiaClient } from '@/subsidia/client';
+import {notFound} from 'next/navigation';
+import {subsidiaClient} from '@/subsidia/client';
 import Image from 'next/image';
-import { formatPriceAmount } from '@subsidia-ch/sdk';
+import {formatPriceAmount} from '@subsidia-ch/sdk';
 
 export default async function OutfitId({
                                            params,
                                        }: {
     params: Promise<{ id: string }>
 }) {
-    const { id } = await params;
+    const {id} = await params;
 
     if (!parseInt(id)) {
         return notFound();
     }
 
     try {
-        const outfit = await subsidiaClient.outfit.getOutfitById({
-            id: parseInt(id),
-            fetchOptions: {
-                cache: 'no-store',
-            },
-        });
+        const [outfit, outfitItems] = await Promise.all([
+            subsidiaClient.outfit.getOutfitById({
+                id: parseInt(id),
+                fetchOptions: {
+                    cache: 'default',
+                },
+            }),
+            subsidiaClient.outfitItem.getOutfitItems({
+                filterOptions: {
+                    outfitId: parseInt(id),
+                },
+                fetchOptions: {
+                    cache: 'default',
+                },
+            }),
+        ]);
 
         if (!outfit) {
             return notFound();
         }
-
-        const outfitItems = await subsidiaClient.outfitItem.getOutfitItems({
-            filterOptions: {
-                outfitId: parseInt(id),
-            },
-            fetchOptions: {
-                cache: 'no-store',
-            },
-        });
 
         return (
             <div>
@@ -46,7 +47,7 @@ export default async function OutfitId({
                         {outfit.assetRelations.assetRelations.map((assetRelation) => (
                             <Image className="aspect-square w-full object-cover rounded-lg border border-gray-900"
                                    key={assetRelation.id} src={assetRelation.asset?.url || ''} alt={outfit.name} width={500}
-                                   height={500} />
+                                   height={500}/>
                         ))}
                     </div>
                 )}
