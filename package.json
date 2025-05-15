@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@subsidia-ch/sdk": "file:.yalc/@subsidia-ch/sdk",
+    "@subsidia-ch/sdk": "1.0.9",
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
