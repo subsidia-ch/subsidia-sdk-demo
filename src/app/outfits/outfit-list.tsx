@@ -1,6 +1,6 @@
 'use client';
 
-import { GetOutfits, Outfit } from '@subsidia-ch/sdk';
+import { GetOutfitsResponse, Outfit } from '@subsidia-ch/sdk';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -8,11 +8,11 @@ import useDebounce from '@/hooks/useDebounce';
 import { getOutfits } from '@/app/outfits/actions';
 
 type OutfitListProps = {
-    initialOutfitResponse: GetOutfits;
+    initialOutfitResponse: GetOutfitsResponse;
 }
 
 export default function OutfitList({ initialOutfitResponse }: OutfitListProps) {
-    const [latestOutfitResponse, setLatestOutfitResponse] = useState<GetOutfits>(initialOutfitResponse);
+    const [latestOutfitResponse, setLatestOutfitResponse] = useState<GetOutfitsResponse>(initialOutfitResponse);
     const [outfits, setOutfits] = useState<Outfit[]>(initialOutfitResponse.outfits);
     const [name, setName] = useState<string>('');
     const [brandLabel, setBrandLabel] = useState<string | undefined>(undefined);
@@ -22,12 +22,12 @@ export default function OutfitList({ initialOutfitResponse }: OutfitListProps) {
 
     const fetchOutfits = async () => {
         const outfitResponse = await getOutfits({
-            filterOptions: {
+            filter: {
                 name: debouncedName,
                 brandLabel,
                 consultantId,
             },
-            paginationOptions: {
+            pagination: {
                 size: 2,
             },
         });
@@ -46,13 +46,13 @@ export default function OutfitList({ initialOutfitResponse }: OutfitListProps) {
     };
 
     useEffect(() => {
-        if (debouncedName !== (latestOutfitResponse.filterOptions.name || '')) {
+        if (debouncedName !== (latestOutfitResponse.filter.name || '')) {
             void fetchOutfits();
         }
     }, [debouncedName]);
 
     useEffect(() => {
-        if (brandLabel !== (latestOutfitResponse.filterOptions.brandLabel) || consultantId !== (latestOutfitResponse.filterOptions.consultantId)) {
+        if (brandLabel !== (latestOutfitResponse.filter.brandLabel) || consultantId !== (latestOutfitResponse.filter.consultantId)) {
             void fetchOutfits();
         }
     }, [brandLabel, consultantId]);
