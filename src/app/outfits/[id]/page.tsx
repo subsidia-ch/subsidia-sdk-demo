@@ -18,15 +18,15 @@ export default async function OutfitId({
         const [outfit, outfitItems] = await Promise.all([
             subsidiaClient.outfit.getOutfitById({
                 id: parseInt(id),
-                fetchOptions: {
+                requestOptions: {
                     cache: 'default',
                 },
             }),
             subsidiaClient.outfitItem.getOutfitItems({
-                filterOptions: {
+                filter: {
                     outfitId: parseInt(id),
                 },
-                fetchOptions: {
+                requestOptions: {
                     cache: 'default',
                 },
             }),

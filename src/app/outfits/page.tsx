@@ -3,10 +3,10 @@ import { getOutfits } from '@/app/outfits/actions';
 
 export default async function Outfits() {
     const outfitResponse = await getOutfits({
-        paginationOptions: {
+        pagination: {
             size: 2,
         },
-        fetchOptions: {
+        requestOptions: {
             cache: 'force-cache',
         },
     });
