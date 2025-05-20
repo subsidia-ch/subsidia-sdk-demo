@@ -46,7 +46,7 @@ export default async function OutfitId({
                     <div className="grid grid-cols-2 gap-4">
                         {outfit.assetRelations.assetRelations.map((assetRelation) => (
                             <Image className="aspect-square w-full object-cover rounded-lg border border-gray-900"
-                                   key={assetRelation.id} src={assetRelation.asset?.url || ''} alt={outfit.name} width={500}
+                                   key={assetRelation.id} src={assetRelation.asset.url} alt={outfit.name} width={500}
                                    height={500}/>
                         ))}
                     </div>
