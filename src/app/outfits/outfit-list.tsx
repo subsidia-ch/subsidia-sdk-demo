@@ -95,7 +95,7 @@ export default function OutfitList({ initialOutfitResponse }: OutfitListProps) {
                                   className="border border-gray-900 rounded-xl p-4 transition-all bg-white hover:bg-gray-50 hover:shadow-md">
                                 <div className="mb-4">
                                     {outfit.assetRelations?.assetRelations?.length ? (
-                                        <Image src={outfit.assetRelations.assetRelations[0].asset?.url || ''}
+                                        <Image src={outfit.assetRelations.assetRelations[0].asset.url}
                                                className="aspect-square object-cover rounded-lg"
                                                alt={outfit.name} width={400} height={400} />
                                     ) : (
