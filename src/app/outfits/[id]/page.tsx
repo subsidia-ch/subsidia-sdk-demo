@@ -1,5 +1,5 @@
 import {notFound} from 'next/navigation';
-import {subsidiaClient} from '@/subsidia/client';
+import {getSubsidiaClient} from '@/subsidia/client';
 import Image from 'next/image';
 import {formatPriceAmount} from '@subsidia-ch/sdk';
 
@@ -13,6 +13,8 @@ export default async function OutfitId({
     if (!parseInt(id)) {
         return notFound();
     }
+
+    const subsidiaClient = await getSubsidiaClient();
 
     try {
         const [outfit, outfitItems] = await Promise.all([
