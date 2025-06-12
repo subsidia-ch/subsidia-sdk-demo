@@ -1,16 +1,18 @@
 import { createClient } from '@subsidia-ch/sdk';
 
-let clientInstance: Awaited<ReturnType<typeof createClient>> | null = null;
+const globalForSubsidia = globalThis as unknown as {
+    subsidiaClient: Awaited<ReturnType<typeof createClient>> | undefined;
+};
 
 export async function getSubsidiaClient() {
-    if (!clientInstance) {
-        clientInstance = await createClient({
+    if (!globalForSubsidia.subsidiaClient) {
+        globalForSubsidia.subsidiaClient = await createClient({
             environment: process.env.SUBSIDIA_ENVIRONMENT as 'PROD' | 'PRE' | 'STA',
             apiKey: process.env.SUBSIDIA_API_KEY || '',
             apiSecret: process.env.SUBSIDIA_API_SECRET || '',
             customFetch: fetch,
         });
     }
-    return clientInstance;
+    return globalForSubsidia.subsidiaClient;
 }
 
