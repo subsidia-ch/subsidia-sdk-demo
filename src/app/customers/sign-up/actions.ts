@@ -58,17 +58,6 @@ export async function signUpCustomer(formState: CustomerSignUpFormState, formDat
             requiredFields: formState.requiredFields,
             resource: customerData,
         });
-
-        if ('valid' in response) {
-            return {
-                success: false,
-                error: true,
-                requiredFields: formState.requiredFields,
-                invalidFields: response.invalidFields,
-                hash: undefined,
-                formValues: customerData,
-            }
-        }
     } catch (error) {
         return {
             success: false,
@@ -78,8 +67,21 @@ export async function signUpCustomer(formState: CustomerSignUpFormState, formDat
             formValues: customerData,
         }
     } finally {
-        if (response && 'hash' in response) {
-            redirect(`/customers/sign-up/${response.hash}`);
+        if (response) {
+            if ('valid' in response) {
+                return {
+                    success: false,
+                    error: true,
+                    requiredFields: formState.requiredFields,
+                    invalidFields: response.invalidFields,
+                    hash: undefined,
+                    formValues: customerData,
+                }
+            }
+
+            if ('hash' in response) {
+                redirect(`/customers/sign-up/${response.hash}`);
+            }
         }
 
         return {

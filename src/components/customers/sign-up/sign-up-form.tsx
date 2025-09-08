@@ -110,12 +110,14 @@ export default function SignUpForm() {
                     )}
 
                     {(isRequired('website') || showAllFields) && (
-                        <InputField name="website"
-                                    label="Website"
-                                    type="text"
-                                    defaultValue={formState.formValues?.website || ''}
-                                    required={isRequired('website')}
-                                    error={!!formState.invalidFields?.includes('website')}/>
+                        <div className="col-span-2">
+                            <InputField name="website"
+                                        label="Website"
+                                        type="text"
+                                        defaultValue={formState.formValues?.website || ''}
+                                        required={isRequired('website')}
+                                        error={!!formState.invalidFields?.includes('website')}/>
+                        </div>
                     )}
 
                     {(isRequired('title') || showAllFields) && (
@@ -149,7 +151,7 @@ export default function SignUpForm() {
                                             error={!!formState.invalidFields?.includes('street')}/>
                             </div>
                             <InputField name="houseNo"
-                                        label="houseNo"
+                                        label="House-Number"
                                         type="text"
                                         defaultValue={formState.formValues?.houseNo || ''}
                                         required={isRequired('houseNo')}
