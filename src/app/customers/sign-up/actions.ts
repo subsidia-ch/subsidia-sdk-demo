@@ -80,7 +80,7 @@ export async function signUpCustomer(formState: CustomerSignUpFormState, formDat
             }
 
             if ('hash' in response) {
-                redirect(`/customers/sign-up/${response.hash}`);
+                redirect(`/customers/sign-up/${response.hash}?validTill=${response.validTill}`);
             }
         }
 
