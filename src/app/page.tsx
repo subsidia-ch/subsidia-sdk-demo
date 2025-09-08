@@ -13,6 +13,11 @@ export default async function Home() {
                             Outfits
                         </Link>
                     </li>
+                    <li>
+                        <Link href={'/customers/sign-up'} title={'Customer Sign-Up'} className="text-gray-800 underline">
+                            Customer Sign-Up
+                        </Link>
+                    </li>
                 </ul>
             </div>
         </div>
