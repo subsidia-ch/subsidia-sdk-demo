@@ -3,7 +3,7 @@
 import {useSearchParams} from 'next/navigation';
 import {useActionState, useState} from 'react';
 import {signUpCustomer} from '@/app/customers/sign-up/actions';
-import {PostCustomerSignUpData} from '@subsidia-ch/sdk';
+import {Country, PostCustomerSignUpData} from '@subsidia-ch/sdk';
 import InputField from '@/components/form/InputField';
 import SelectField from '@/components/form/SelectField';
 
@@ -16,7 +16,11 @@ export type CustomerSignUpFormState = {
     invalidFields?: (keyof PostCustomerSignUpData)[];
 }
 
-export default function SignUpForm() {
+type SignUpFormProps = {
+    countries: Country[];
+}
+
+export default function SignUpForm({countries}: SignUpFormProps) {
     const searchParams = useSearchParams();
     const [showAllFields, setShowAllFields] = useState<boolean>(false);
     const requiredFieldsParam = searchParams.get('requiredFields');
@@ -203,28 +207,10 @@ export default function SignUpForm() {
                                          label="Country"
                                          defaultValue={formState.formValues?.countryCode || ''}
                                          required={isRequired('countryCode')}
-                                         options={[
-                                             {
-                                                 value: 'CH',
-                                                 label: 'Switzerland',
-                                             },
-                                             {
-                                                 value: 'DE',
-                                                 label: 'Germany',
-                                             },
-                                             {
-                                                 value: 'AT',
-                                                 label: 'Austria',
-                                             },
-                                             {
-                                                 value: 'FR',
-                                                 label: 'France',
-                                             },
-                                             {
-                                                 value: 'IT',
-                                                 label: 'Italy',
-                                             },
-                                         ]}
+                                         options={countries.map((country) => ({
+                                             value: country.countryCode,
+                                             label: country.displayName,
+                                         }))}
                                          error={!!formState.invalidFields?.includes('countryCode')}/>
                         </div>
                     )}
