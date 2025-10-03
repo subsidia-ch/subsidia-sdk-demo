@@ -109,6 +109,10 @@ export default function SignUpForm({countries}: SignUpFormProps) {
                                              value: 'FEMALE',
                                              label: 'Female',
                                          },
+                                         {
+                                             value: 'OTHER',
+                                             label: 'Other',
+                                         },
                                      ]}
                                      error={!!formState.invalidFields?.includes('gender')}/>
                     )}
