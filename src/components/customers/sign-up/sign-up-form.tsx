@@ -6,6 +6,7 @@ import {signUpCustomer} from '@/app/customers/sign-up/actions';
 import {Country, PostCustomerSignUpData} from '@subsidia-ch/sdk';
 import InputField from '@/components/form/InputField';
 import SelectField from '@/components/form/SelectField';
+import CheckboxField from '@/components/form/CheckboxField';
 
 export type CustomerSignUpFormState = {
     success: boolean;
@@ -14,17 +15,21 @@ export type CustomerSignUpFormState = {
     hash?: string;
     formValues: PostCustomerSignUpData;
     invalidFields?: (keyof PostCustomerSignUpData)[];
+    agbUrl: string;
 }
 
 type SignUpFormProps = {
     countries: Country[];
 }
 
+const AGB_URL = 'https://www.subsidia.ch/data-processing-agreement';
+
 export default function SignUpForm({countries}: SignUpFormProps) {
     const searchParams = useSearchParams();
     const [showAllFields, setShowAllFields] = useState<boolean>(false);
     const requiredFieldsParam = searchParams.get('requiredFields');
-    const requiredFields = requiredFieldsParam ? requiredFieldsParam.split(',') : ['firstName', 'lastName'];
+    const agbUrl = searchParams.get('agbUrl') || AGB_URL;
+    const requiredFields = requiredFieldsParam ? requiredFieldsParam.split(',') : ['gender', 'firstName', 'lastName'];
 
     const [formState, formAction, isPending] = useActionState<CustomerSignUpFormState, FormData>(signUpCustomer, {
         success: false,
@@ -32,6 +37,7 @@ export default function SignUpForm({countries}: SignUpFormProps) {
         requiredFields: requiredFields as (keyof PostCustomerSignUpData)[],
         formValues: {},
         invalidFields: [],
+        agbUrl,
     });
 
     const isRequired = (field: keyof PostCustomerSignUpData) => requiredFields.includes(field);
@@ -69,21 +75,45 @@ export default function SignUpForm({countries}: SignUpFormProps) {
                     )}
 
                     {(isRequired('email') || showAllFields) && (
-                        <InputField name="email"
-                                    label="Email"
-                                    type="email"
-                                    defaultValue={formState.formValues?.email || ''}
-                                    required={isRequired('email')}
-                                    error={!!formState.invalidFields?.includes('email')}/>
+                        <div className="col-span-2">
+                            <InputField name="email"
+                                        label="Email"
+                                        type="email"
+                                        defaultValue={formState.formValues?.email || ''}
+                                        required={isRequired('email')}
+                                        error={!!formState.invalidFields?.includes('email')}/>
+                        </div>
                     )}
 
                     {(isRequired('phone') || showAllFields) && (
-                        <InputField name="phone"
-                                    label="Phone"
-                                    type="tel"
-                                    defaultValue={formState.formValues?.phone || ''}
-                                    required={isRequired('phone')}
-                                    error={!!formState.invalidFields?.includes('phone')}/>
+                        <div className="col-span-2 grid grid-cols-3 md:grid-cols-4 gap-4">
+                            <SelectField name="phoneType" label="Type" defaultValue="PRIVATE" options={[
+                                {
+                                    label: 'Private',
+                                    value: 'PRIVATE',
+                                },
+                                {
+                                    label: 'Mobile',
+                                    value: 'MOBILE',
+                                },
+                                {
+                                    label: 'Business',
+                                    value: 'COMPANY',
+                                },
+                                {
+                                    label: 'Fax',
+                                    value: 'FAX',
+                                },
+                            ]} error={!!formState.invalidFields?.includes('phoneType')} required={isRequired('phoneType')}/>
+                            <div className="col-span-2 md:col-span-3">
+                                <InputField name="phone"
+                                            label="Phone"
+                                            type="tel"
+                                            defaultValue={formState.formValues?.phone || ''}
+                                            required={isRequired('phone')}
+                                            error={!!formState.invalidFields?.includes('phone')}/>
+                            </div>
+                        </div>
                     )}
 
                     {(isRequired('dateOfBirth') || showAllFields) && (
@@ -218,6 +248,16 @@ export default function SignUpForm({countries}: SignUpFormProps) {
                                          error={!!formState.invalidFields?.includes('countryCode')}/>
                         </div>
                     )}
+                </div>
+
+                <div>
+                    <CheckboxField name="acceptTerms"
+                                   label={
+                                       <span>Ich akzeptiere die <a target={'_blank'} title="AGB" href={agbUrl}>AGB</a></span>
+                                   }
+                                   required={true}
+                                   error={!!formState.invalidFields?.includes('acceptTerms')}
+                    />
                 </div>
 
                 <button

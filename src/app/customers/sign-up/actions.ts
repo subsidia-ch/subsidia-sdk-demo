@@ -3,7 +3,7 @@
 import {getSubsidiaClient} from '@/subsidia/client';
 import {
     ApiPostCustomerSignUpResponse,
-    CustomerGender,
+    CustomerGender, CustomerPhoneType,
     PostCustomerSignUpData,
     PostCustomerSignUpValidationResponse,
 } from '@subsidia-ch/sdk';
@@ -16,6 +16,7 @@ export async function signUpCustomer(formState: CustomerSignUpFormState, formDat
     const companyName = formData.get('companyName') as string;
     const email = formData.get('email') as string;
     const phone = formData.get('phone') as string;
+    const phoneType = formData.get('phoneType') as CustomerPhoneType;
     const dateOfBirth = formData.get('dateOfBirth') as string;
     const gender = formData.get('gender') as CustomerGender;
     const website = formData.get('website') as string;
@@ -28,6 +29,7 @@ export async function signUpCustomer(formState: CustomerSignUpFormState, formDat
     const zipCode = formData.get('zipCode') as string;
     const town = formData.get('town') as string;
     const countryCode = formData.get('countryCode') as string;
+    const acceptTerms = formData.get('acceptTerms') as string;
 
     const customerData: PostCustomerSignUpData = {
         firstName,
@@ -38,6 +40,7 @@ export async function signUpCustomer(formState: CustomerSignUpFormState, formDat
         gender,
         email,
         phone,
+        phoneType,
         title,
         additionalAddress,
         street,
@@ -47,6 +50,8 @@ export async function signUpCustomer(formState: CustomerSignUpFormState, formDat
         zipCode,
         town,
         countryCode,
+        acceptTerms: acceptTerms === 'on',
+        agbUrl: formState.agbUrl,
     };
 
     let response: ApiPostCustomerSignUpResponse | PostCustomerSignUpValidationResponse | undefined;
@@ -59,12 +64,14 @@ export async function signUpCustomer(formState: CustomerSignUpFormState, formDat
             resource: customerData,
         });
     } catch (error) {
+        console.log(response, error);
         return {
             success: false,
             error: true,
             requiredFields: formState.requiredFields,
             invalidFields: [],
             formValues: customerData,
+            agbUrl: formState.agbUrl,
         }
     } finally {
         if (response) {
@@ -76,6 +83,7 @@ export async function signUpCustomer(formState: CustomerSignUpFormState, formDat
                     invalidFields: response.invalidFields,
                     hash: undefined,
                     formValues: customerData,
+                    agbUrl: formState.agbUrl,
                 }
             }
 
@@ -90,6 +98,7 @@ export async function signUpCustomer(formState: CustomerSignUpFormState, formDat
             requiredFields: formState.requiredFields,
             invalidFields: [],
             formValues: customerData,
+            agbUrl: formState.agbUrl,
         }
     }
 }
