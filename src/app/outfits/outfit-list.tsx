@@ -1,21 +1,21 @@
 'use client';
 
-import { GetOutfitsResponse, Outfit } from '@subsidia-ch/sdk';
-import { useEffect, useState } from 'react';
+import {GetOutfitsResponse, Outfit} from '@subsidia-ch/sdk';
+import {useEffect, useState} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import useDebounce from '@/hooks/useDebounce';
-import { getOutfits } from '@/app/outfits/actions';
+import {getOutfits} from '@/app/outfits/actions';
 
 type OutfitListProps = {
     initialOutfitResponse: GetOutfitsResponse;
 }
 
-export default function OutfitList({ initialOutfitResponse }: OutfitListProps) {
+export default function OutfitList({initialOutfitResponse}: OutfitListProps) {
     const [latestOutfitResponse, setLatestOutfitResponse] = useState<GetOutfitsResponse>(initialOutfitResponse);
     const [outfits, setOutfits] = useState<Outfit[]>(initialOutfitResponse.outfits);
     const [name, setName] = useState<string>('');
-    const [brandLabel, setBrandLabel] = useState<string | undefined>(undefined);
+    const [brandId, setBrandId] = useState<number | undefined>(undefined);
     const [consultantId, setConsultantId] = useState<string | undefined>(undefined);
 
     const debouncedName = useDebounce<string>(name, 300);
@@ -24,8 +24,8 @@ export default function OutfitList({ initialOutfitResponse }: OutfitListProps) {
         const outfitResponse = await getOutfits({
             filter: {
                 name: debouncedName,
-                brandLabel,
                 consultantId,
+                brandId,
             },
             pagination: {
                 size: 2,
@@ -52,10 +52,10 @@ export default function OutfitList({ initialOutfitResponse }: OutfitListProps) {
     }, [debouncedName]);
 
     useEffect(() => {
-        if (brandLabel !== (latestOutfitResponse.filter.brandLabel) || consultantId !== (latestOutfitResponse.filter.consultantId)) {
+        if (brandId !== (latestOutfitResponse.filter.brandId) || consultantId !== (latestOutfitResponse.filter.consultantId)) {
             void fetchOutfits();
         }
-    }, [brandLabel, consultantId]);
+    }, [brandId, consultantId]);
 
     return (
         <div>
@@ -64,14 +64,14 @@ export default function OutfitList({ initialOutfitResponse }: OutfitListProps) {
                        className="w-full p-4 border border-gray-900 rounded-lg"
                        placeholder="Search for outfits..."
                        onChange={(e) => setName(e.target.value)}
-                       value={name} />
+                       value={name}/>
                 {initialOutfitResponse.outfitItemBrands.brands.length && (
                     <select name="brand" className="w-full p-4 border border-gray-900 rounded-lg"
-                            value={brandLabel}
-                            onChange={(e) => setBrandLabel(e.target.value || undefined)}>
+                            value={brandId}
+                            onChange={(e) => setBrandId(+e.target.value)}>
                         <option value="">Select a brand</option>
                         {initialOutfitResponse.outfitItemBrands.brands.map((brand) => (
-                            <option value={brand.name} key={brand.name}>{brand.name}</option>
+                            <option value={brand.id} key={brand.id}>{brand.name}</option>
                         ))}
                     </select>
                 )}
@@ -97,7 +97,7 @@ export default function OutfitList({ initialOutfitResponse }: OutfitListProps) {
                                     {outfit.assetRelations?.assetRelations?.length ? (
                                         <Image src={outfit.assetRelations.assetRelations[0].asset.url}
                                                className="aspect-square object-cover rounded-lg"
-                                               alt={outfit.name} width={400} height={400} />
+                                               alt={outfit.name} width={400} height={400}/>
                                     ) : (
                                         <>PLACEHOLDER</>
                                     )}
