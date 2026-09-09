@@ -6,11 +6,12 @@
         "dev": "next dev --turbopack",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "yalc:add": "yalc add @subsidia-ch/sdk"
     },
     "dependencies": {
         "@heroicons/react": "^2.2.0",
-        "@subsidia-ch/sdk": "1.4.0",
+        "@subsidia-ch/sdk": "1.5.0",
         "date-fns": "^4.1.0",
         "next": "15.5.18",
         "react": "^19.0.0",
